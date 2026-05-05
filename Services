@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services - MagicByte ICT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { background: #f5f7fa; color: #1f2937; }
+
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    header h1 { font-size: 1.5rem; font-weight: 700; }
+
+    nav { display: flex; gap: 20px; }
+
+    nav a {
+      text-decoration: none;
+      color: #374151;
+      font-weight: 500;
+      position: relative;
+    }
+
+    a.card:hover h3 {
+      color: #2563eb;
+    }
+      text-decoration: none;
+      color: #374151;
+      font-weight: 500;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #2563eb;
+      transition: width 0.2s ease;
+    }
+
+    nav a:hover::after { width: 100%; }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+    }
+
+    .menu-toggle span {
+      width: 25px;
+      height: 3px;
+      background: #1f2937;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+
+    .menu-toggle.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+    }
+
+    .hero h2 { font-size: 2.2rem; margin-bottom: 10px; }
+
+    .section {
+      padding: 60px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      text-decoration: none;
+      color: inherit;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    @media (max-width: 700px) {
+      nav {
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        width: 200px;
+        padding: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        display: none;
+      }
+
+      nav.active { display: flex; }
+      .menu-toggle { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>MagicByte ICT</h1>
+
+  <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav id="nav">
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="benchmarks.html">Benchmarks</a>
+    <a href="hardware.html">Hardware Tests</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Our Services</h2>
+  <p>Professional ICT solutions, testing, and support tailored to your needs.</p>
+</section>
+
+<section class="section">
+  <div class="grid">
+
+    <a href="benchmarks.html" class="card">
+      <h3>Benchmarking</h3>
+      <p>Accurate performance testing and benchmarking for CPUs, GPUs, and full systems.</p>
+    </a>
+
+    <a href="solutions.html" class="card">
+      <h3>MagicByte ICT Solutions</h3>
+      <p>Custom IT solutions designed to improve efficiency, scalability, and security.</p>
+    </a>
+
+    <a href="support.html" class="card">
+      <h3>Technical Support</h3>
+      <p>Reliable support for troubleshooting, maintenance, and system optimisation.</p>
+    </a>
+
+    <a href="diagnostics.html" class="card">
+      <h3>Diagnostics</h3>
+      <p>Detailed system diagnostics to identify and resolve hardware or software issues.</p>
+    </a>
+
+    <a href="tutorials.html" class="card">
+      <h3>ICT Tutorials</h3>
+      <p>Easy-to-follow guides and tutorials to help users understand and use technology effectively.</p>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  © <span id="year"></span> MagicByte ICT. All rights reserved.
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('nav').classList.toggle('active');
+    document.getElementById('menuBtn').classList.toggle('active');
+  }
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

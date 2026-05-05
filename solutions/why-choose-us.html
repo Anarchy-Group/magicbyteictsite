@@ -220,13 +220,20 @@ footer {
 
 <header>
 <h1>MagicByte ICT</h1>
-<nav>
-<a href="index.html">Home</a>
-<a href="services.html">Services</a>
-<a href="benchmarks.html">Benchmarks</a>
-<a href="hardware.html">Hardware Tests</a>
-<a href="contact.html">Contact</a>
-</nav>
+  <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav id="nav">
+    <a href="index" onclick="closeMenu()">Home</a>
+    <a href="services" onclick="closeMenu()">Services</a>
+    <a href="benchmarks" onclick="closeMenu()">Benchmarks</a>
+    <a href="hardware" onclick="closeMenu()">Hardware Tests</a>
+    <a href="contact" onclick="closeMenu()">Contact</a>
+  </nav>
+</header>
 </header>
 
 <section class="hero">

@@ -7,34 +7,151 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-body { background: #f5f7fa; color: #1f2937; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:#f5f7fa;color:#1f2937}
+header{background:white;box-shadow:0 2px 10px rgba(0,0,0,.05);padding:20px 40px;display:flex;justify-content:space-between;align-items:center}
+nav{display:flex;gap:20px}
+nav a{text-decoration:none;color:#374151;font-weight:500}
+.hero{text-align:center;padding:80px 20px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white}
+.section{padding:60px 20px;max-width:1100px;margin:auto}
+.card{background:white;padding:20px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,.05);margin-bottom:20px}
+select{padding:10px;border-radius:6px;border:1px solid #ccc;margin-right:10px;margin-bottom:10px}
+button{padding:10px 18px;border:none;border-radius:8px;background:#2563eb;color:white;font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+canvas{margin-top:20px}
+footer{text-align:center;padding:20px;color:#6b7280}
+</style>
+</head>
+<body>
 
-header {
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+<header>
+<h1>MagicByte ICT</h1>
+<nav>
+<a href="index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="benchmarks.html">Benchmarks</a>
+<a href="hardware.html">Hardware Tests</a>
+<a href="contact.html">Contact</a>
+</nav>
+</header>
+
+<section class="hero">
+<h2>Advanced Benchmark Platform</h2>
+<p>Select systems or hardware and compare real performance data.</p>
+</section>
+
+<section class="section">
+
+<div class="card">
+<h3>Select Hardware</h3>
+<select id="cpu"></select>
+<select id="gpu"></select>
+<select id="ram"></select>
+<button onclick="loadSingle()">Load System</button>
+</div>
+
+<div class="card">
+<h3>Compare Systems</h3>
+<select id="compare1"></select>
+<select id="compare2"></select>
+<button onclick="compareSystems()">Compare</button>
+</div>
+
+<div class="card">
+<h3>Results</h3>
+<p id="specs"></p>
+<ul id="software"></ul>
+<ul id="tools"></ul>
+<canvas id="chart" height="120"></canvas>
+</div>
+
+</section>
+
+<footer>© <span id="year"></span> MagicByte ICT</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+const systems=[
+{
+name:"Gaming PC",
+cpu:"Ryzen 5 5600X",
+gpu:"RTX 3060",
+ram:"16GB",
+specs:"Ryzen 5 5600X | RTX 3060 | 16GB",
+results:{CPU:14500,GPU:12000,RAM:3200,Temp:75},
+software:["Cyberpunk","Fortnite"],
+tools:["Cinebench","3DMark"]
+},
+{
+name:"Workstation",
+cpu:"i7-12700K",
+gpu:"RTX 4070",
+ram:"32GB",
+specs:"i7-12700K | RTX 4070 | 32GB",
+results:{CPU:22000,GPU:18000,RAM:3600,Temp:70},
+software:["Premiere","Blender"],
+tools:["PugetBench","3DMark"]
+}
+];
+
+const cpuSel=document.getElementById('cpu');
+const gpuSel=document.getElementById('gpu');
+const ramSel=document.getElementById('ram');
+const compare1=document.getElementById('compare1');
+const compare2=document.getElementById('compare2');
+
+systems.forEach(s=>{
+if(!cpuSel.innerHTML.includes(s.cpu))cpuSel.innerHTML+=`<option>${s.cpu}</option>`;
+if(!gpuSel.innerHTML.includes(s.gpu))gpuSel.innerHTML+=`<option>${s.gpu}</option>`;
+if(!ramSel.innerHTML.includes(s.ram))ramSel.innerHTML+=`<option>${s.ram}</option>`;
+compare1.innerHTML+=`<option>${s.name}</option>`;
+compare2.innerHTML+=`<option>${s.name}</option>`;
+});
+
+let chart;
+
+function drawChart(labels,data1,data2){
+if(chart)chart.destroy();
+chart=new Chart(document.getElementById('chart'),{
+type:'bar',
+data:{labels:labels,datasets:[
+{label:'System 1',data:data1},
+{label:'System 2',data:data2}
+]}
+});
 }
 
-header h1 { font-size: 1.5rem; font-weight: 700; }
-
-nav { display: flex; gap: 20px; }
-
-nav a {
-  text-decoration: none;
-  color: #374151;
-  font-weight: 500;
-  position: relative;
+function loadSingle(){
+const cpu=cpuSel.value;
+const gpu=gpuSel.value;
+const ram=ramSel.value;
+const s=systems.find(x=>x.cpu===cpu&&x.gpu===gpu&&x.ram===ram);
+if(!s){alert('No system found');return}
+showData(s);
+drawChart(Object.keys(s.results),Object.values(s.results));
 }
 
-nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
+function compareSystems(){
+const s1=systems.find(s=>s.name===compare1.value);
+const s2=systems.find(s=>s.name===compare2.value);
+showData(s1);
+drawChart(Object.keys(s1.results),Object.values(s1.results),Object.values(s2.results));
+}
+
+function showData(s){
+document.getElementById('specs').textContent=s.specs;
+document.getElementById('software').innerHTML=s.software.map(x=>`<li>${x}</li>`).join('');
+document.getElementById('tools').innerHTML=s.tools.map(x=>`<li>${x}</li>`).join('');
+}
+
+document.getElementById('year').textContent=new Date().getFullYear();
+
+</script>
+
+</body>
+</html>  left: 0;
   width: 0%;
   height: 2px;
   background: #2563eb;

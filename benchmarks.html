@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -7,37 +8,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-body { background: #f5f7fa; color: #1f2937; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:#f5f7fa;color:#1f2937}
 
-header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
-header h1 { font-size: 1.5rem; font-weight: 700; }
-nav { display: flex; gap: 20px; }
-nav a { text-decoration: none; color: #374151; font-weight: 500; }
+header{background:white;box-shadow:0 2px 10px rgba(0,0,0,.05);padding:20px 40px;display:flex;justify-content:space-between}
+nav{display:flex;gap:20px}
+nav a{text-decoration:none;color:#374151}
 
-.hero { text-align: center; padding: 80px 20px; background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; }
-.hero h2 { font-size: 2.2rem; margin-bottom: 10px; }
+.hero{text-align:center;padding:80px 20px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white}
 
-.section { padding: 60px 20px; max-width: 1100px; margin: auto; }
+.section{padding:60px 20px;max-width:1100px;margin:auto}
 
-.card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom: 25px; }
+.card{background:white;padding:25px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,.05);margin-bottom:25px}
 
-.controls { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
-select, button { padding: 10px; border-radius: 6px; border: 1px solid #d1d5db; }
-button { background: #2563eb; color: white; border: none; cursor: pointer; }
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+select,input,button{padding:10px;border-radius:6px;border:1px solid #ccc}
+button{background:#2563eb;color:white;border:none;cursor:pointer}
 
-.spec-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 10px; margin-top: 10px; }
-.spec-item { background:#f9fafb; padding:10px; border-radius:8px; }
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
+.spec-item{background:#f9fafb;padding:10px;border-radius:8px}
 
-.ranking { margin-top: 15px; }
-.ranking li { margin-bottom: 5px; }
+.ranking li{margin-bottom:5px}
 
-canvas { margin-top: 20px; }
+footer{text-align:center;padding:20px;color:#6b7280}
 
-footer { text-align: center; padding: 20px; font-size: 0.85rem; color: #6b7280; }
-
-@media (max-width:700px){ .controls{flex-direction:column;} }
+@media(max-width:700px){.controls{flex-direction:column}}
 </style>
+
 </head>
 
 <body>
@@ -55,10 +52,15 @@ footer { text-align: center; padding: 20px; font-size: 0.85rem; color: #6b7280; 
 
 <section class="hero">
 <h2>Advanced Benchmark Platform</h2>
-<p>Select systems or hardware and compare real performance data.</p>
+<p>Compare systems, analyse FPS, and detect bottlenecks.</p>
 </section>
 
 <section class="section">
+
+<div class="card">
+<h3>Search Systems</h3>
+<input id="search" placeholder="Search system..." oninput="filterSystems()">
+</div>
 
 <div class="card">
 <h3>Select Hardware</h3>
@@ -71,53 +73,46 @@ footer { text-align: center; padding: 20px; font-size: 0.85rem; color: #6b7280; 
 </div>
 
 <div class="card">
-<h3>Compare Systems</h3>
-<div class="controls">
-<select id="compare1"></select>
-<select id="compare2"></select>
-<button onclick="compareSystems()">Compare</button>
-</div>
-</div>
-
-<div class="card">
-<h3>System Details</h3>
+<h3>Results</h3>
 <p id="specs"></p>
-<div class="spec-grid" id="specDetails"></div>
 
-<h4 style="margin-top:15px">Software / Games</h4>
+<div id="bottleneck"></div>
+
+<div class="spec-grid" id="details"></div>
+
+<h4>FPS (Game Performance)</h4>
+<canvas id="chart"></canvas>
+
+<h4 style="margin-top:15px">Software</h4>
 <ul id="software"></ul>
 
-<h4 style="margin-top:15px">Benchmark Tools</h4>
+<h4 style="margin-top:15px">Tools</h4>
 <ul id="tools"></ul>
-
-<canvas id="chart" height="120"></canvas>
 </div>
 
 <div class="card">
-<h3>System Ranking (FPS Based)</h3>
+<h3>Leaderboard (FPS)</h3>
 <ul id="ranking" class="ranking"></ul>
 </div>
 
 </section>
 
-<footer>
-© <span id="year"></span> MagicByte ICT
-</footer>
+<footer>© <span id="year"></span> MagicByte ICT</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-const systems = [
+
+const systems=[
 {
 name:"Gaming PC",
 cpu:"Ryzen 5 5600X",
 gpu:"RTX 3060",
 ram:"16GB",
 specs:"Mid-range gaming build",
-details:{OS:"Windows 11",Storage:"1TB NVMe",Motherboard:"B550"},
-fps:75,
-results:{CPU:14500,GPU:12000,RAM:3200,Temp:75},
-software:["Cyberpunk 2077","Fortnite"],
+details:{OS:"Windows 11",Storage:"1TB NVMe"},
+fps:{Low:120,Medium:90,High:75,Ultra:60},
+software:["Cyberpunk","Fortnite"],
 tools:["Cinebench","3DMark"]
 },
 {
@@ -126,71 +121,76 @@ cpu:"i7-12700K",
 gpu:"RTX 4070",
 ram:"32GB",
 specs:"High-end workstation",
-details:{OS:"Windows 11",Storage:"2TB NVMe",Motherboard:"Z690"},
-fps:110,
-results:{CPU:22000,GPU:18000,RAM:3600,Temp:70},
-software:["Premiere Pro","Blender"],
+details:{OS:"Windows 11",Storage:"2TB NVMe"},
+fps:{Low:180,Medium:140,High:110,Ultra:85},
+software:["Premiere","Blender"],
 tools:["PugetBench","3DMark"]
 }
 ];
 
+// populate dropdowns
 const cpuSel=document.getElementById('cpu');
 const gpuSel=document.getElementById('gpu');
 const ramSel=document.getElementById('ram');
-const compare1=document.getElementById('compare1');
-const compare2=document.getElementById('compare2');
 
 systems.forEach(s=>{
-if(!cpuSel.innerHTML.includes(s.cpu)) cpuSel.innerHTML+=`<option>${s.cpu}</option>`;
-if(!gpuSel.innerHTML.includes(s.gpu)) gpuSel.innerHTML+=`<option>${s.gpu}</option>`;
-if(!ramSel.innerHTML.includes(s.ram)) ramSel.innerHTML+=`<option>${s.ram}</option>`;
-compare1.innerHTML+=`<option>${s.name}</option>`;
-compare2.innerHTML+=`<option>${s.name}</option>`;
+if(!cpuSel.innerHTML.includes(s.cpu))cpuSel.innerHTML+=`<option>${s.cpu}</option>`;
+if(!gpuSel.innerHTML.includes(s.gpu))gpuSel.innerHTML+=`<option>${s.gpu}</option>`;
+if(!ramSel.innerHTML.includes(s.ram))ramSel.innerHTML+=`<option>${s.ram}</option>`;
 });
 
 let chart;
 
-function drawChart(labels,data1,data2){
-if(chart) chart.destroy();
+function drawChart(data){
+if(chart)chart.destroy();
 chart=new Chart(document.getElementById('chart'),{
 type:'bar',
-data:{labels:labels,datasets:[
-{label:'System 1',data:data1},
-...(data2 ? [{label:'System 2',data:data2}] : [])
-]}
+data:{
+labels:Object.keys(data),
+datasets:[{label:'FPS',data:Object.values(data)}]
+}
 });
 }
 
-function showData(s){
-document.getElementById('specs').textContent=s.specs;
-
-document.getElementById('specDetails').innerHTML=
-Object.entries(s.details).map(([k,v])=>`<div class="spec-item"><strong>${k}:</strong> ${v}</div>`).join('');
-
-document.getElementById('software').innerHTML=s.software.map(x=>`<li>${x}</li>`).join('');
-document.getElementById('tools').innerHTML=s.tools.map(x=>`<li>${x}</li>`).join('');
+function detectBottleneck(cpu,gpu){
+if(cpu.includes("5600") && gpu.includes("4070")) return "⚠️ CPU Bottleneck";
+if(cpu.includes("12700") && gpu.includes("3060")) return "⚠️ GPU Bottleneck";
+return "✅ Balanced System";
 }
 
 function loadSingle(){
 const s=systems.find(x=>x.cpu===cpuSel.value && x.gpu===gpuSel.value && x.ram===ramSel.value);
-if(!s){ alert('No system found'); return; }
-showData(s);
-drawChart(Object.keys(s.results),Object.values(s.results));
+if(!s){alert("No system found");return;}
+
+document.getElementById('specs').textContent=s.specs;
+document.getElementById('bottleneck').textContent=detectBottleneck(s.cpu,s.gpu);
+
+document.getElementById('details').innerHTML=
+Object.entries(s.details).map(([k,v])=>`<div class="spec-item"><b>${k}</b>: ${v}</div>`).join('');
+
+document.getElementById('software').innerHTML=s.software.map(x=>`<li>${x}</li>`).join('');
+document.getElementById('tools').innerHTML=s.tools.map(x=>`<li>${x}</li>`).join('');
+
+drawChart(s.fps);
 }
 
-function compareSystems(){
-const s1=systems.find(s=>s.name===compare1.value);
-const s2=systems.find(s=>s.name===compare2.value);
-showData(s1);
-drawChart(Object.keys(s1.results),Object.values(s1.results),Object.values(s2.results));
-}
+// leaderboard
+const ranking=document.getElementById('ranking');
+const sorted=[...systems].sort((a,b)=>b.fps.Ultra-a.fps.Ultra);
+ranking.innerHTML=sorted.map((s,i)=>`<li>#${i+1} ${s.name} - ${s.fps.Ultra} FPS (Ultra)</li>`).join('');
 
-// ranking
-const rankingEl=document.getElementById('ranking');
-const sorted=[...systems].sort((a,b)=>b.fps-a.fps);
-rankingEl.innerHTML=sorted.map((s,i)=>`<li>#${i+1} ${s.name} - ${s.fps} FPS</li>`).join('');
+// search
+function filterSystems(){
+const q=document.getElementById('search').value.toLowerCase();
+ranking.innerHTML=systems
+.filter(s=>s.name.toLowerCase().includes(q))
+.sort((a,b)=>b.fps.Ultra-a.fps.Ultra)
+.map((s,i)=>`<li>#${i+1} ${s.name} - ${s.fps.Ultra} FPS</li>`)
+.join('');
+}
 
 document.getElementById('year').textContent=new Date().getFullYear();
+
 </script>
 
 </body>

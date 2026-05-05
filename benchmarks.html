@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -10,35 +9,22 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
 body{background:#f5f7fa;color:#1f2937}
-
 header{background:white;box-shadow:0 2px 10px rgba(0,0,0,.05);padding:20px 40px;display:flex;justify-content:space-between}
 nav{display:flex;gap:20px}
 nav a{text-decoration:none;color:#374151}
-
 .hero{text-align:center;padding:80px 20px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white}
-
 .section{padding:60px 20px;max-width:1100px;margin:auto}
 .card{background:white;padding:25px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,.05);margin-bottom:25px}
-
 .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
 select,button{padding:10px;border-radius:6px;border:1px solid #ccc}
 button{background:#2563eb;color:white;border:none;cursor:pointer}
-
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
+.spec-item{background:#f9fafb;padding:10px;border-radius:8px}
 canvas{margin-top:20px}
-
-.modal{
-position:fixed;top:0;left:0;width:100%;height:100%;
-background:rgba(0,0,0,.5);
-display:none;align-items:center;justify-content:center;
-}
-
-.modal-content{
-background:white;padding:20px;border-radius:10px;width:90%;max-width:600px;
-}
-
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
+.modal-content{background:white;padding:20px;border-radius:10px;width:90%;max-width:600px}
 footer{text-align:center;padding:20px;color:#6b7280}
 </style>
-
 </head>
 
 <body>
@@ -67,6 +53,20 @@ footer{text-align:center;padding:20px;color:#6b7280}
 </div>
 
 <div class="card">
+<h3>Select System</h3>
+<select id="systemSelect" onchange="loadSystem()"></select>
+
+<p id="specs" style="margin-top:10px"></p>
+<div class="spec-grid" id="details"></div>
+
+<h4 style="margin-top:15px">Software / Games Used</h4>
+<ul id="software"></ul>
+
+<h4 style="margin-top:15px">Benchmark Tools</h4>
+<ul id="tools"></ul>
+</div>
+
+<div class="card">
 <h3>Game Selection</h3>
 <select id="gameSelect" onchange="updateCharts()"></select>
 </div>
@@ -90,8 +90,6 @@ footer{text-align:center;padding:20px;color:#6b7280}
 
 <footer>© <span id="year"></span> MagicByte ICT</footer>
 
-<!-- Modal -->
-
 <div class="modal" id="modal">
 <div class="modal-content">
 <h3>Submit Benchmark Data</h3>
@@ -101,86 +99,91 @@ footer{text-align:center;padding:20px;color:#6b7280}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
 
 const systems=[
 {
 name:"Gaming PC",
-fps:{
-Cyberpunk:{Low:120,Medium:90,High:75,Ultra:60},
-Fortnite:{Low:160,Medium:130,High:110,Ultra:90}
-},
+specs:"Ryzen 5 5600X | RTX 3060 | 16GB RAM",
+details:{OS:"Windows 11",Storage:"1TB NVMe",Motherboard:"B550"},
+software:["Cyberpunk","Fortnite"],
+tools:["Cinebench","3DMark"],
+fps:{Cyberpunk:{Low:120,Medium:90,High:75,Ultra:60}},
 bench:{CPU:14500,GPU:12000}
 },
 {
 name:"Workstation",
-fps:{
-Cyberpunk:{Low:180,Medium:140,High:110,Ultra:85},
-Fortnite:{Low:220,Medium:180,High:150,Ultra:120}
-},
+specs:"i7-12700K | RTX 4070 | 32GB RAM",
+details:{OS:"Windows 11",Storage:"2TB NVMe",Motherboard:"Z690"},
+software:["Premiere","Blender"],
+tools:["PugetBench","3DMark"],
+fps:{Cyberpunk:{Low:180,Medium:140,High:110,Ultra:85}},
 bench:{CPU:22000,GPU:18000}
 }
 ];
 
+const systemSelect=document.getElementById('systemSelect');
+systems.forEach(s=>systemSelect.innerHTML+=`<option>${s.name}</option>`);
+
 const games=[...new Set(systems.flatMap(s=>Object.keys(s.fps)))];
 const gameSelect=document.getElementById('gameSelect');
-
 games.forEach(g=>gameSelect.innerHTML+=`<option>${g}</option>`);
 
-const container=document.getElementById('compareContainer');
+function loadSystem(){
+const s=systems.find(x=>x.name===systemSelect.value);
 
+document.getElementById('specs').textContent=s.specs;
+document.getElementById('details').innerHTML=
+Object.entries(s.details).map(([k,v])=>`<div class="spec-item"><b>${k}</b>: ${v}</div>`).join('');
+
+document.getElementById('software').innerHTML=s.software.map(x=>`<li>${x}</li>`).join('');
+document.getElementById('tools').innerHTML=s.tools.map(x=>`<li>${x}</li>`).join('');
+}
+
+const container=document.getElementById('compareContainer');
 function addCompare(){
 const select=document.createElement('select');
 systems.forEach(s=>select.innerHTML+=`<option>${s.name}</option>`);
 container.appendChild(select);
 }
-
 addCompare();
 addCompare();
 
 let fpsChart, benchChart;
 
 function updateCharts(){
-const selectedGame=gameSelect.value;
+const game=gameSelect.value;
 const selects=container.querySelectorAll('select');
 
 const labels=["Low","Medium","High","Ultra"];
-
-const datasets=Array.from(selects).map((sel,i)=>{
+const datasets=Array.from(selects).map(sel=>{
 const sys=systems.find(s=>s.name===sel.value);
-return{
-label:sys.name,
-data:Object.values(sys.fps[selectedGame])
-};
+return{label:sys.name,data:Object.values(sys.fps[game]||{})};
 });
 
 if(fpsChart)fpsChart.destroy();
 fpsChart=new Chart(document.getElementById('fpsChart'),{
-type:'bar',
-data:{labels,datasets}
+type:'bar',data:{labels,datasets}
 });
 
 if(benchChart)benchChart.destroy();
 benchChart=new Chart(document.getElementById('benchChart'),{
 type:'bar',
-data:{
-labels:["CPU","GPU"],
-datasets:Array.from(selects).map(sel=>{
+data:{labels:["CPU","GPU"],datasets:Array.from(selects).map(sel=>{
 const sys=systems.find(s=>s.name===sel.value);
 return{label:sys.name,data:Object.values(sys.bench)};
-})
-}
+})}
 });
 }
 
-// modal
 function openModal(){document.getElementById('modal').style.display='flex'}
 function closeModal(){document.getElementById('modal').style.display='none'}
 
+loadSystem();
+updateCharts();
+
 document.getElementById('year').textContent=new Date().getFullYear();
 
-updateCharts();
 </script>
 
 </body>

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Benchmarks - MagicByte ICT</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -18,21 +18,25 @@ nav a{text-decoration:none;color:#374151}
 .hero{text-align:center;padding:80px 20px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white}
 
 .section{padding:60px 20px;max-width:1100px;margin:auto}
-
 .card{background:white;padding:25px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,.05);margin-bottom:25px}
 
 .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-select,input,button{padding:10px;border-radius:6px;border:1px solid #ccc}
+select,button{padding:10px;border-radius:6px;border:1px solid #ccc}
 button{background:#2563eb;color:white;border:none;cursor:pointer}
 
-.spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
-.spec-item{background:#f9fafb;padding:10px;border-radius:8px}
+canvas{margin-top:20px}
 
-.ranking li{margin-bottom:5px}
+.modal{
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,.5);
+display:none;align-items:center;justify-content:center;
+}
+
+.modal-content{
+background:white;padding:20px;border-radius:10px;width:90%;max-width:600px;
+}
 
 footer{text-align:center;padding:20px;color:#6b7280}
-
-@media(max-width:700px){.controls{flex-direction:column}}
 </style>
 
 </head>
@@ -52,52 +56,49 @@ footer{text-align:center;padding:20px;color:#6b7280}
 
 <section class="hero">
 <h2>Advanced Benchmark Platform</h2>
-<p>Compare systems, analyse FPS, and detect bottlenecks.</p>
+<p>Compare systems, analyse FPS, and explore performance data.</p>
 </section>
 
 <section class="section">
 
 <div class="card">
-<h3>Search Systems</h3>
-<input id="search" placeholder="Search system..." oninput="filterSystems()">
+<h3>Submit Benchmark</h3>
+<button onclick="openModal()">Submit Your Results</button>
 </div>
 
 <div class="card">
-<h3>Select Hardware</h3>
-<div class="controls">
-<select id="cpu"></select>
-<select id="gpu"></select>
-<select id="ram"></select>
-<button onclick="loadSingle()">Load System</button>
-</div>
+<h3>Game Selection</h3>
+<select id="gameSelect" onchange="updateCharts()"></select>
 </div>
 
 <div class="card">
-<h3>Results</h3>
-<p id="specs"></p>
-
-<div id="bottleneck"></div>
-
-<div class="spec-grid" id="details"></div>
-
-<h4>FPS (Game Performance)</h4>
-<canvas id="chart"></canvas>
-
-<h4 style="margin-top:15px">Software</h4>
-<ul id="software"></ul>
-
-<h4 style="margin-top:15px">Tools</h4>
-<ul id="tools"></ul>
+<h3>Compare Systems</h3>
+<div id="compareContainer"></div>
+<button onclick="addCompare()">+ Add System</button>
+<button onclick="updateCharts()">Compare</button>
 </div>
 
 <div class="card">
-<h3>Leaderboard (FPS)</h3>
-<ul id="ranking" class="ranking"></ul>
+<h3>FPS Chart</h3>
+<canvas id="fpsChart"></canvas>
+
+<h3 style="margin-top:20px">Benchmark Scores</h3>
+<canvas id="benchChart"></canvas>
 </div>
 
 </section>
 
 <footer>© <span id="year"></span> MagicByte ICT</footer>
+
+<!-- Modal -->
+
+<div class="modal" id="modal">
+<div class="modal-content">
+<h3>Submit Benchmark Data</h3>
+<iframe src="YOUR_MICROSOFT_FORM_LINK" width="100%" height="400" style="border:none;"></iframe>
+<button onclick="closeModal()">Close</button>
+</div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -106,91 +107,80 @@ footer{text-align:center;padding:20px;color:#6b7280}
 const systems=[
 {
 name:"Gaming PC",
-cpu:"Ryzen 5 5600X",
-gpu:"RTX 3060",
-ram:"16GB",
-specs:"Mid-range gaming build",
-details:{OS:"Windows 11",Storage:"1TB NVMe"},
-fps:{Low:120,Medium:90,High:75,Ultra:60},
-software:["Cyberpunk","Fortnite"],
-tools:["Cinebench","3DMark"]
+fps:{
+Cyberpunk:{Low:120,Medium:90,High:75,Ultra:60},
+Fortnite:{Low:160,Medium:130,High:110,Ultra:90}
+},
+bench:{CPU:14500,GPU:12000}
 },
 {
 name:"Workstation",
-cpu:"i7-12700K",
-gpu:"RTX 4070",
-ram:"32GB",
-specs:"High-end workstation",
-details:{OS:"Windows 11",Storage:"2TB NVMe"},
-fps:{Low:180,Medium:140,High:110,Ultra:85},
-software:["Premiere","Blender"],
-tools:["PugetBench","3DMark"]
+fps:{
+Cyberpunk:{Low:180,Medium:140,High:110,Ultra:85},
+Fortnite:{Low:220,Medium:180,High:150,Ultra:120}
+},
+bench:{CPU:22000,GPU:18000}
 }
 ];
 
-// populate dropdowns
-const cpuSel=document.getElementById('cpu');
-const gpuSel=document.getElementById('gpu');
-const ramSel=document.getElementById('ram');
+const games=[...new Set(systems.flatMap(s=>Object.keys(s.fps)))];
+const gameSelect=document.getElementById('gameSelect');
 
-systems.forEach(s=>{
-if(!cpuSel.innerHTML.includes(s.cpu))cpuSel.innerHTML+=`<option>${s.cpu}</option>`;
-if(!gpuSel.innerHTML.includes(s.gpu))gpuSel.innerHTML+=`<option>${s.gpu}</option>`;
-if(!ramSel.innerHTML.includes(s.ram))ramSel.innerHTML+=`<option>${s.ram}</option>`;
+games.forEach(g=>gameSelect.innerHTML+=`<option>${g}</option>`);
+
+const container=document.getElementById('compareContainer');
+
+function addCompare(){
+const select=document.createElement('select');
+systems.forEach(s=>select.innerHTML+=`<option>${s.name}</option>`);
+container.appendChild(select);
+}
+
+addCompare();
+addCompare();
+
+let fpsChart, benchChart;
+
+function updateCharts(){
+const selectedGame=gameSelect.value;
+const selects=container.querySelectorAll('select');
+
+const labels=["Low","Medium","High","Ultra"];
+
+const datasets=Array.from(selects).map((sel,i)=>{
+const sys=systems.find(s=>s.name===sel.value);
+return{
+label:sys.name,
+data:Object.values(sys.fps[selectedGame])
+};
 });
 
-let chart;
+if(fpsChart)fpsChart.destroy();
+fpsChart=new Chart(document.getElementById('fpsChart'),{
+type:'bar',
+data:{labels,datasets}
+});
 
-function drawChart(data){
-if(chart)chart.destroy();
-chart=new Chart(document.getElementById('chart'),{
+if(benchChart)benchChart.destroy();
+benchChart=new Chart(document.getElementById('benchChart'),{
 type:'bar',
 data:{
-labels:Object.keys(data),
-datasets:[{label:'FPS',data:Object.values(data)}]
+labels:["CPU","GPU"],
+datasets:Array.from(selects).map(sel=>{
+const sys=systems.find(s=>s.name===sel.value);
+return{label:sys.name,data:Object.values(sys.bench)};
+})
 }
 });
 }
 
-function detectBottleneck(cpu,gpu){
-if(cpu.includes("5600") && gpu.includes("4070")) return "⚠️ CPU Bottleneck";
-if(cpu.includes("12700") && gpu.includes("3060")) return "⚠️ GPU Bottleneck";
-return "✅ Balanced System";
-}
-
-function loadSingle(){
-const s=systems.find(x=>x.cpu===cpuSel.value && x.gpu===gpuSel.value && x.ram===ramSel.value);
-if(!s){alert("No system found");return;}
-
-document.getElementById('specs').textContent=s.specs;
-document.getElementById('bottleneck').textContent=detectBottleneck(s.cpu,s.gpu);
-
-document.getElementById('details').innerHTML=
-Object.entries(s.details).map(([k,v])=>`<div class="spec-item"><b>${k}</b>: ${v}</div>`).join('');
-
-document.getElementById('software').innerHTML=s.software.map(x=>`<li>${x}</li>`).join('');
-document.getElementById('tools').innerHTML=s.tools.map(x=>`<li>${x}</li>`).join('');
-
-drawChart(s.fps);
-}
-
-// leaderboard
-const ranking=document.getElementById('ranking');
-const sorted=[...systems].sort((a,b)=>b.fps.Ultra-a.fps.Ultra);
-ranking.innerHTML=sorted.map((s,i)=>`<li>#${i+1} ${s.name} - ${s.fps.Ultra} FPS (Ultra)</li>`).join('');
-
-// search
-function filterSystems(){
-const q=document.getElementById('search').value.toLowerCase();
-ranking.innerHTML=systems
-.filter(s=>s.name.toLowerCase().includes(q))
-.sort((a,b)=>b.fps.Ultra-a.fps.Ultra)
-.map((s,i)=>`<li>#${i+1} ${s.name} - ${s.fps.Ultra} FPS</li>`)
-.join('');
-}
+// modal
+function openModal(){document.getElementById('modal').style.display='flex'}
+function closeModal(){document.getElementById('modal').style.display='none'}
 
 document.getElementById('year').textContent=new Date().getFullYear();
 
+updateCharts();
 </script>
 
 </body>

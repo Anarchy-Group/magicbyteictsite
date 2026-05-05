@@ -9,7 +9,89 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
 body{background:#f5f7fa;color:#1f2937}
-header{background:white;box-shadow:0 2px 10px rgba(0,0,0,.05);padding:20px 40px;display:flex;justify-content:space-between;align-items:center}
+header {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  position: relative;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #2563eb;
+  transition: width 0.2s ease;
+}
+
+nav a:hover { color: #2563eb; }
+nav a:hover::after { width: 100%; }
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: #1f2937;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+@media (max-width: 700px) {
+  nav {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    width: 200px;
+    padding: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    display: none;
+  }
+
+  nav.active { display: flex; }
+  .menu-toggle { displa
 nav{display:flex;gap:20px}
 nav a{text-decoration:none;color:#374151;font-weight:500}
 .hero{text-align:center;padding:80px 20px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white}
@@ -144,203 +226,6 @@ function showData(s){
 document.getElementById('specs').textContent=s.specs;
 document.getElementById('software').innerHTML=s.software.map(x=>`<li>${x}</li>`).join('');
 document.getElementById('tools').innerHTML=s.tools.map(x=>`<li>${x}</li>`).join('');
-}
-
-document.getElementById('year').textContent=new Date().getFullYear();
-
-</script>
-
-</body>
-</html>  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #2563eb;
-  transition: width 0.2s ease;
-}
-
-nav a:hover { color: #2563eb; }
-nav a:hover::after { width: 100%; }
-
-.hero {
-  text-align: center;
-  padding: 80px 20px;
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
-  color: white;
-}
-
-.section {
-  padding: 60px 20px;
-  max-width: 1100px;
-  margin: auto;
-}
-
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-}
-
-select {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  margin-right: 10px;
-  font-size: 0.95rem;
-}
-
-button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.gallery img,
-.gallery video {
-  width: 100%;
-  border-radius: 10px;
-}
-
-.error {
-  color: red;
-  margin-top: 10px;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 0.85rem;
-  color: #6b7280;
-}
-</style>
-</head>
-<body>
-
-<header>
-<h1>MagicByte ICT</h1>
-<nav>
-<a href="index">Home</a>
-<a href="services">Services</a>
-<a href="benchmarks">Benchmarks</a>
-<a href="hardware">Hardware Tests</a>
-<a href="contact">Contact</a>
-</nav>
-</header>
-
-<section class="hero">
-<h2>Hardware Benchmark Selector</h2>
-<p>Select hardware to find matching tested systems.</p>
-</section>
-
-<section class="section">
-
-<div class="card">
-<h3>Select Hardware</h3>
-<select id="cpuSelect"></select>
-<select id="gpuSelect"></select>
-<select id="ramSelect"></select>
-<button onclick="findSystem()">Find Matching System</button>
-<p id="error" class="error"></p>
-</div>
-
-<div class="card">
-<h3>Results</h3>
-<p id="specs"></p>
-<table id="results"></table>
-</div>
-
-<div class="card">
-<h3>Gallery</h3>
-<div class="gallery" id="gallery"></div>
-</div>
-
-</section>
-
-<footer>
-  © <span id="year"></span> MagicByte ICT. All rights reserved. Owned by the <href=https://www.magicplum.co.uk>Magic Plum Company</href></footer>
-<script>
-
-const systems = [
-  {
-    cpu:"Ryzen 5 5600X",
-    gpu:"RTX 3060",
-    ram:"16GB",
-    specs:"Ryzen 5 5600X | RTX 3060 | 16GB RAM",
-    results:{CPU:"14500",GPU:"12000",Temp:"75°C"},
-    gallery:[{type:"image",src:"https://via.placeholder.com/400x250?text=5600X"}]
-  },
-  {
-    cpu:"i7-12700K",
-    gpu:"RTX 4070",
-    ram:"32GB",
-    specs:"i7-12700K | RTX 4070 | 32GB RAM",
-    results:{CPU:"22000",GPU:"18000",Temp:"70°C"},
-    gallery:[{type:"image",src:"https://via.placeholder.com/400x250?text=12700K"}]
-  }
-];
-
-const cpuSelect = document.getElementById('cpuSelect');
-const gpuSelect = document.getElementById('gpuSelect');
-const ramSelect = document.getElementById('ramSelect');
-
-[...new Set(systems.map(s=>s.cpu))].forEach(c=>cpuSelect.innerHTML+=`<option>${c}</option>`);
-[...new Set(systems.map(s=>s.gpu))].forEach(g=>gpuSelect.innerHTML+=`<option>${g}</option>`);
-[...new Set(systems.map(s=>s.ram))].forEach(r=>ramSelect.innerHTML+=`<option>${r}</option>`);
-
-function findSystem(){
-  const cpu=cpuSelect.value;
-  const gpu=gpuSelect.value;
-  const ram=ramSelect.value;
-
-  const match = systems.find(s=> s.cpu===cpu && s.gpu===gpu && s.ram===ram);
-
-  const errorEl=document.getElementById('error');
-
-  if(!match){
-    errorEl.textContent="No tested system found with this configuration.";
-    results.innerHTML="";
-    specs.textContent="";
-    gallery.innerHTML="";
-    return;
-  }
-
-  errorEl.textContent="";
-  specs.textContent=match.specs;
-
-  results.innerHTML="<tr><th>Test</th><th>Result</th></tr>";
-  Object.entries(match.results).forEach(([k,v])=>{
-    results.innerHTML+=`<tr><td>${k}</td><td>${v}</td></tr>`;
-  });
-
-  gallery.innerHTML="";
-  match.gallery.forEach(m=>{
-    if(m.type==='image') gallery.innerHTML+=`<img src="${m.src}">`;
-    if(m.type==='video') gallery.innerHTML+=`<video controls src="${m.src}"></video>`;
-  });
 }
 
 document.getElementById('year').textContent=new Date().getFullYear();

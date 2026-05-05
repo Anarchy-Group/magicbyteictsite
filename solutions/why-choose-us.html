@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Why Choose Us - MagicByte ICT</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { background: #f5f7fa; color: #1f2937; }
+
+/* HEADER */
+header {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 { font-size: 1.5rem; font-weight: 700; }
+
+nav { display: flex; gap: 20px; }
+
+nav a {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  position: relative;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #2563eb;
+  transition: width 0.2s ease;
+}
+
+nav a:hover { color: #2563eb; }
+nav a:hover::after { width: 100%; }
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+}
+
+.hero h2 { font-size: 2.2rem; margin-bottom: 10px; }
+
+/* SECTION */
+.section {
+  padding: 60px 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+  margin-bottom: 10px;
+}
+
+/* CTA */
+.cta {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.cta a {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.cta a:hover {
+  background: #1d4ed8;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>MagicByte ICT</h1>
+<nav>
+<a href="index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="benchmarks.html">Benchmarks</a>
+<a href="hardware.html">Hardware Tests</a>
+<a href="contact.html">Contact</a>
+</nav>
+</header>
+
+<section class="hero">
+<h2>Why Choose MagicByte ICT?</h2>
+<p>Reliable, modern, and performance-driven ICT solutions you can trust.</p>
+</section>
+
+<section class="section">
+
+<div class="grid">
+
+<div class="card">
+<h3>Performance-Focused Approach</h3>
+<p>Every solution is designed with performance and efficiency in mind, ensuring your systems operate at their full potential.</p>
+</div>
+
+<div class="card">
+<h3>Tailored Solutions</h3>
+<p>No generic setups. Every system and service is customised to meet your specific needs and goals.</p>
+</div>
+
+<div class="card">
+<h3>Modern Technology</h3>
+<p>We utilise up-to-date hardware, software, and best practices to deliver reliable and future-proof solutions.</p>
+</div>
+
+<div class="card">
+<h3>Transparent & Honest</h3>
+<p>Clear communication, honest recommendations, and no unnecessary upselling.</p>
+</div>
+
+<div class="card">
+<h3>Technical Expertise</h3>
+<p>Strong knowledge across hardware, software, and system performance ensures high-quality results.</p>
+</div>
+
+<div class="card">
+<h3>Continuous Support</h3>
+<p>We don’t just deliver solutions — we provide ongoing support and improvements.</p>
+</div>
+
+</div>
+
+<div class="cta">
+<a href="contact.html">Start Your Project</a>
+</div>
+
+</section>
+
+<footer>
+© <span id="year"></span> MagicByte ICT. All rights reserved.
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

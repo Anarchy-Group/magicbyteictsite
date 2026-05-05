@@ -159,6 +159,21 @@
 
       .menu-toggle { display: flex; }
     }
+  .btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 12px 28px;
+    border-radius: 8px;
+    background: white;
+    color: #1e3a8a;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+
+.btn:hover {
+  background: #e5e7eb;
+}
 
     /* Animations */
     @keyframes fadeIn {
@@ -195,8 +210,8 @@
 <section class="hero">
   <h2>Modern IT Solutions for Your Business</h2>
   <p>We provide secure, scalable, and innovative ICT services to help your business grow.</p>
-  <button href="services">Get Started</button>
-  <button href="contact">Contact Us</button>
+  <a href="services" class="btn">Get Started</a>
+  <a href="contact" class="btn">Contact Us</a>
 </section>
 
 <section id="about" class="section">

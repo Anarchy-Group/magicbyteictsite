@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -11,114 +10,34 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 body { background: #f5f7fa; color: #1f2937; }
 
-/* HEADER */
-header {
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-}
-
+header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
 header h1 { font-size: 1.5rem; font-weight: 700; }
-
 nav { display: flex; gap: 20px; }
+nav a { text-decoration: none; color: #374151; font-weight: 500; }
 
-nav a {
-  text-decoration: none;
-  color: #374151;
-  font-weight: 500;
-  position: relative;
-}
-
-nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #2563eb;
-  transition: width 0.2s ease;
-}
-
-nav a:hover { color: #2563eb; }
-nav a:hover::after { width: 100%; }
-
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 80px 20px;
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
-  color: white;
-}
-
+.hero { text-align: center; padding: 80px 20px; background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; }
 .hero h2 { font-size: 2.2rem; margin-bottom: 10px; }
 
-/* SECTION */
-.section {
-  padding: 60px 20px;
-  max-width: 1100px;
-  margin: auto;
-}
+.section { padding: 60px 20px; max-width: 1100px; margin: auto; }
 
-/* CARD */
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+.card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom: 25px; }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-}
+.controls { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+select, button { padding: 10px; border-radius: 6px; border: 1px solid #d1d5db; }
+button { background: #2563eb; color: white; border: none; cursor: pointer; }
 
-/* CONTROLS */
-select {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  font-size: 0.95rem;
-}
+.spec-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 10px; margin-top: 10px; }
+.spec-item { background:#f9fafb; padding:10px; border-radius:8px; }
 
-button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
+.ranking { margin-top: 15px; }
+.ranking li { margin-bottom: 5px; }
 
-.controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+canvas { margin-top: 20px; }
 
-/* MOBILE */
-@media (max-width: 700px) {
-  .controls {
-    flex-direction: column;
-  }
-}
+footer { text-align: center; padding: 20px; font-size: 0.85rem; color: #6b7280; }
 
-/* FOOTER */
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 0.85rem;
-  color: #6b7280;
-}
+@media (max-width:700px){ .controls{flex-direction:column;} }
 </style>
-
 </head>
 
 <body>
@@ -161,17 +80,22 @@ footer {
 </div>
 
 <div class="card">
-<h3>Results</h3>
+<h3>System Details</h3>
 <p id="specs"></p>
+<div class="spec-grid" id="specDetails"></div>
 
-<h4>Software / Games</h4>
+<h4 style="margin-top:15px">Software / Games</h4>
 <ul id="software"></ul>
 
-<h4>Benchmark Tools</h4>
+<h4 style="margin-top:15px">Benchmark Tools</h4>
 <ul id="tools"></ul>
 
 <canvas id="chart" height="120"></canvas>
+</div>
 
+<div class="card">
+<h3>System Ranking (FPS Based)</h3>
+<ul id="ranking" class="ranking"></ul>
 </div>
 
 </section>
@@ -189,9 +113,11 @@ name:"Gaming PC",
 cpu:"Ryzen 5 5600X",
 gpu:"RTX 3060",
 ram:"16GB",
-specs:"Ryzen 5 5600X | RTX 3060 | 16GB RAM",
+specs:"Mid-range gaming build",
+details:{OS:"Windows 11",Storage:"1TB NVMe",Motherboard:"B550"},
+fps:75,
 results:{CPU:14500,GPU:12000,RAM:3200,Temp:75},
-software:["Cyberpunk 2077","Fortnite","Blender"],
+software:["Cyberpunk 2077","Fortnite"],
 tools:["Cinebench","3DMark"]
 },
 {
@@ -199,9 +125,11 @@ name:"Workstation",
 cpu:"i7-12700K",
 gpu:"RTX 4070",
 ram:"32GB",
-specs:"i7-12700K | RTX 4070 | 32GB RAM",
+specs:"High-end workstation",
+details:{OS:"Windows 11",Storage:"2TB NVMe",Motherboard:"Z690"},
+fps:110,
 results:{CPU:22000,GPU:18000,RAM:3600,Temp:70},
-software:["Premiere Pro","After Effects"],
+software:["Premiere Pro","Blender"],
 tools:["PugetBench","3DMark"]
 }
 ];
@@ -224,27 +152,28 @@ let chart;
 
 function drawChart(labels,data1,data2){
 if(chart) chart.destroy();
-
 chart=new Chart(document.getElementById('chart'),{
 type:'bar',
-data:{
-labels:labels,
-datasets:[
+data:{labels:labels,datasets:[
 {label:'System 1',data:data1},
 ...(data2 ? [{label:'System 2',data:data2}] : [])
-]
-}
+]}
 });
 }
 
+function showData(s){
+document.getElementById('specs').textContent=s.specs;
+
+document.getElementById('specDetails').innerHTML=
+Object.entries(s.details).map(([k,v])=>`<div class="spec-item"><strong>${k}:</strong> ${v}</div>`).join('');
+
+document.getElementById('software').innerHTML=s.software.map(x=>`<li>${x}</li>`).join('');
+document.getElementById('tools').innerHTML=s.tools.map(x=>`<li>${x}</li>`).join('');
+}
+
 function loadSingle(){
-const cpu=cpuSel.value;
-const gpu=gpuSel.value;
-const ram=ramSel.value;
-
-const s=systems.find(x=>x.cpu===cpu && x.gpu===gpu && x.ram===ram);
+const s=systems.find(x=>x.cpu===cpuSel.value && x.gpu===gpuSel.value && x.ram===ramSel.value);
 if(!s){ alert('No system found'); return; }
-
 showData(s);
 drawChart(Object.keys(s.results),Object.values(s.results));
 }
@@ -252,16 +181,14 @@ drawChart(Object.keys(s.results),Object.values(s.results));
 function compareSystems(){
 const s1=systems.find(s=>s.name===compare1.value);
 const s2=systems.find(s=>s.name===compare2.value);
-
 showData(s1);
 drawChart(Object.keys(s1.results),Object.values(s1.results),Object.values(s2.results));
 }
 
-function showData(s){
-document.getElementById('specs').textContent=s.specs;
-document.getElementById('software').innerHTML=s.software.map(x=>`<li>${x}</li>`).join('');
-document.getElementById('tools').innerHTML=s.tools.map(x=>`<li>${x}</li>`).join('');
-}
+// ranking
+const rankingEl=document.getElementById('ranking');
+const sorted=[...systems].sort((a,b)=>b.fps-a.fps);
+rankingEl.innerHTML=sorted.map((s,i)=>`<li>#${i+1} ${s.name} - ${s.fps} FPS</li>`).join('');
 
 document.getElementById('year').textContent=new Date().getFullYear();
 </script>

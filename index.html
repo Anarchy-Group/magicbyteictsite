@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MagicByte ICT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { background: #f5f7fa; color: #1f2937; }
+
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    header h1 { font-size: 1.5rem; font-weight: 700; }
+
+    nav {
+      display: flex;
+      gap: 20px;
+      transition: all 0.25s ease;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #374151;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #2563eb;
+      transition: width 0.2s ease;
+    }
+
+    nav a:hover { color: #2563eb; }
+    nav a:hover::after { width: 100%; }
+
+    /* Hamburger */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+      transition: transform 0.3s ease;
+    }
+
+    .menu-toggle span {
+      width: 25px;
+      height: 3px;
+      background: #1f2937;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .hero h2 { font-size: 2.2rem; margin-bottom: 15px; }
+    .hero p { max-width: 600px; margin: auto; opacity: 0.9; }
+
+    .hero button {
+      margin-top: 25px;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      background: white;
+      color: #1e3a8a;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .hero button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .section {
+      padding: 60px 20px;
+      max-width: 1100px;
+      margin: auto;
+      animation: fadeUp 0.6s ease;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      margin-bottom: 15px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    /* Mobile */
+    @media (max-width: 700px) {
+      nav {
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        width: 200px;
+        padding: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+      }
+
+      nav.active {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+      }
+
+      .menu-toggle { display: flex; }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>MagicByte ICT</h1>
+
+  <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav id="nav">
+    <a href="index.html" onclick="closeMenu()">Home</a>
+    <a href="services.html" onclick="closeMenu()">Services</a>
+    <a href="benchmarks.html" onclick="closeMenu()">Benchmarks</a>
+    <a href="hardware.html" onclick="closeMenu()">Hardware Tests</a>
+    <a href="contact.html" onclick="closeMenu()">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Modern IT Solutions for Your Business</h2>
+  <p>We provide secure, scalable, and innovative ICT services to help your business grow.</p>
+  <button onclick="scrollToSection('about')">Get Started</button>
+</section>
+
+<section id="about" class="section">
+  <h2>Welcome to MagicByte ICT</h2>
+  <div class="card">
+    <p>MagicByte ICT delivers professional IT services, performance testing, and hardware analysis. We focus on helping businesses and individuals make informed technology decisions through reliable data and expert support.</p>
+  </div>
+</section>
+
+<section class="section">
+  <h2>What We Do</h2>
+  <div class="card">
+    <h3>ICT Services</h3>
+    <p>Business-focused IT solutions including support, cloud systems, and cybersecurity.</p>
+  </div>
+  <div class="card">
+    <h3>Benchmarks</h3>
+    <p>Accurate performance testing for CPUs, GPUs, and systems.</p>
+  </div>
+  <div class="card">
+    <h3>Hardware Testing</h3>
+    <p>Thermal, stress, and real-world performance testing for modern hardware.</p>
+  </div>
+</section>
+
+<footer>
+  © <span id="year"></span> MagicByte ICT. All rights reserved.
+</footer>
+
+<script>
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function toggleMenu() {
+    document.getElementById('nav').classList.toggle('active');
+    document.getElementById('menuBtn').classList.toggle('active');
+  }
+
+  function closeMenu() {
+    document.getElementById('nav').classList.remove('active');
+    document.getElementById('menuBtn').classList.remove('active');
+  }
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

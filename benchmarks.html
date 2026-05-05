@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -7,102 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:#f5f7fa;color:#1f2937}
-header {
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-}
-
-header h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-nav {
-  display: flex;
-  gap: 20px;
-}
-
-nav a {
-  text-decoration: none;
-  color: #374151;
-  font-weight: 500;
-  position: relative;
-}
-
-nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #2563eb;
-  transition: width 0.2s ease;
-}
-
-nav a:hover { color: #2563eb; }
-nav a:hover::after { width: 100%; }
-
-.menu-toggle {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  gap: 4px;
-}
-
-.menu-toggle span {
-  width: 25px;
-  height: 3px;
-  background: #1f2937;
-  border-radius: 2px;
-  transition: 0.3s;
-}
-
-.menu-toggle.active span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.menu-toggle.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.menu-toggle.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(6px, -6px);
-}
-
-@media (max-width: 700px) {
-  nav {
-    position: absolute;
-    top: 70px;
-    right: 0;
-    background: white;
-    flex-direction: column;
-    width: 200px;
-    padding: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    display: none;
-  }
-
-  nav.active { display: flex; }
-  .menu-toggle { displa
-nav{display:flex;gap:20px}
-nav a{text-decoration:none;color:#374151;font-weight:500}
-.hero{text-align:center;padding:80px 20px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white}
-.section{padding:60px 20px;max-width:1100px;margin:auto}
-.card{background:white;padding:20px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,.05);margin-bottom:20px}
-select{padding:10px;border-radius:6px;border:1px solid #ccc;margin-right:10px;margin-bottom:10px}
-button{padding:10px 18px;border:none;border-radius:8px;background:#2563eb;color:white;font-weight:600;cursor:pointer}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:700px){.grid{grid-template-columns:1fr}}
-canvas{margin-top:20px}
-footer{text-align:center;padding:20px;color:#6b7280}
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 body { background: #f5f7fa; color: #1f2937; }
 
@@ -119,10 +24,7 @@ header {
 
 header h1 { font-size: 1.5rem; font-weight: 700; }
 
-nav {
-  display: flex;
-  gap: 20px;
-}
+nav { display: flex; gap: 20px; }
 
 nav a {
   text-decoration: none;
@@ -182,7 +84,6 @@ select {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #d1d5db;
-  margin-right: 10px;
   font-size: 0.95rem;
 }
 
@@ -194,39 +95,19 @@ button {
   color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-/* GRID (for compare layout) */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
+/* MOBILE */
 @media (max-width: 700px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  nav {
-    position: absolute;
-    top: 70px;
-    right: 0;
-    background: white;
+  .controls {
     flex-direction: column;
-    width: 200px;
-    padding: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    display: none;
   }
-
-  nav.active { display: flex; }
 }
 
 /* FOOTER */
@@ -237,7 +118,9 @@ footer {
   color: #6b7280;
 }
 </style>
+
 </head>
+
 <body>
 
 <header>
@@ -260,43 +143,55 @@ footer {
 
 <div class="card">
 <h3>Select Hardware</h3>
+<div class="controls">
 <select id="cpu"></select>
 <select id="gpu"></select>
 <select id="ram"></select>
 <button onclick="loadSingle()">Load System</button>
 </div>
+</div>
 
 <div class="card">
 <h3>Compare Systems</h3>
+<div class="controls">
 <select id="compare1"></select>
 <select id="compare2"></select>
 <button onclick="compareSystems()">Compare</button>
+</div>
 </div>
 
 <div class="card">
 <h3>Results</h3>
 <p id="specs"></p>
+
+<h4>Software / Games</h4>
 <ul id="software"></ul>
+
+<h4>Benchmark Tools</h4>
 <ul id="tools"></ul>
+
 <canvas id="chart" height="120"></canvas>
+
 </div>
 
 </section>
 
-<footer>© <span id="year"></span> MagicByte ICT</footer>
+<footer>
+© <span id="year"></span> MagicByte ICT
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
 
-const systems=[
+<script>
+const systems = [
 {
 name:"Gaming PC",
 cpu:"Ryzen 5 5600X",
 gpu:"RTX 3060",
 ram:"16GB",
-specs:"Ryzen 5 5600X | RTX 3060 | 16GB",
+specs:"Ryzen 5 5600X | RTX 3060 | 16GB RAM",
 results:{CPU:14500,GPU:12000,RAM:3200,Temp:75},
-software:["Cyberpunk","Fortnite"],
+software:["Cyberpunk 2077","Fortnite","Blender"],
 tools:["Cinebench","3DMark"]
 },
 {
@@ -304,9 +199,9 @@ name:"Workstation",
 cpu:"i7-12700K",
 gpu:"RTX 4070",
 ram:"32GB",
-specs:"i7-12700K | RTX 4070 | 32GB",
+specs:"i7-12700K | RTX 4070 | 32GB RAM",
 results:{CPU:22000,GPU:18000,RAM:3600,Temp:70},
-software:["Premiere","Blender"],
+software:["Premiere Pro","After Effects"],
 tools:["PugetBench","3DMark"]
 }
 ];
@@ -318,9 +213,9 @@ const compare1=document.getElementById('compare1');
 const compare2=document.getElementById('compare2');
 
 systems.forEach(s=>{
-if(!cpuSel.innerHTML.includes(s.cpu))cpuSel.innerHTML+=`<option>${s.cpu}</option>`;
-if(!gpuSel.innerHTML.includes(s.gpu))gpuSel.innerHTML+=`<option>${s.gpu}</option>`;
-if(!ramSel.innerHTML.includes(s.ram))ramSel.innerHTML+=`<option>${s.ram}</option>`;
+if(!cpuSel.innerHTML.includes(s.cpu)) cpuSel.innerHTML+=`<option>${s.cpu}</option>`;
+if(!gpuSel.innerHTML.includes(s.gpu)) gpuSel.innerHTML+=`<option>${s.gpu}</option>`;
+if(!ramSel.innerHTML.includes(s.ram)) ramSel.innerHTML+=`<option>${s.ram}</option>`;
 compare1.innerHTML+=`<option>${s.name}</option>`;
 compare2.innerHTML+=`<option>${s.name}</option>`;
 });
@@ -328,13 +223,17 @@ compare2.innerHTML+=`<option>${s.name}</option>`;
 let chart;
 
 function drawChart(labels,data1,data2){
-if(chart)chart.destroy();
+if(chart) chart.destroy();
+
 chart=new Chart(document.getElementById('chart'),{
 type:'bar',
-data:{labels:labels,datasets:[
+data:{
+labels:labels,
+datasets:[
 {label:'System 1',data:data1},
-{label:'System 2',data:data2}
-]}
+...(data2 ? [{label:'System 2',data:data2}] : [])
+]
+}
 });
 }
 
@@ -342,8 +241,10 @@ function loadSingle(){
 const cpu=cpuSel.value;
 const gpu=gpuSel.value;
 const ram=ramSel.value;
-const s=systems.find(x=>x.cpu===cpu&&x.gpu===gpu&&x.ram===ram);
-if(!s){alert('No system found');return}
+
+const s=systems.find(x=>x.cpu===cpu && x.gpu===gpu && x.ram===ram);
+if(!s){ alert('No system found'); return; }
+
 showData(s);
 drawChart(Object.keys(s.results),Object.values(s.results));
 }
@@ -351,6 +252,7 @@ drawChart(Object.keys(s.results),Object.values(s.results));
 function compareSystems(){
 const s1=systems.find(s=>s.name===compare1.value);
 const s2=systems.find(s=>s.name===compare2.value);
+
 showData(s1);
 drawChart(Object.keys(s1.results),Object.values(s1.results),Object.values(s2.results));
 }
@@ -362,7 +264,6 @@ document.getElementById('tools').innerHTML=s.tools.map(x=>`<li>${x}</li>`).join(
 }
 
 document.getElementById('year').textContent=new Date().getFullYear();
-
 </script>
 
 </body>

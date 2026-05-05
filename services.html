@@ -24,20 +24,18 @@
 
     nav { display: flex; gap: 20px; }
 
+    nav {
+      display: flex;
+      gap: 20px;
+      transition: all 0.25s ease;
+    }
+
     nav a {
       text-decoration: none;
       color: #374151;
       font-weight: 500;
       position: relative;
-    }
-
-    a.card:hover h3 {
-      color: #2563eb;
-    }
-      text-decoration: none;
-      color: #374151;
-      font-weight: 500;
-      position: relative;
+      transition: color 0.2s ease;
     }
 
     nav a::after {
